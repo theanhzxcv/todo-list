@@ -1,5 +1,14 @@
 const todoList = [];
 
+window.onload = function () {
+    const savedTodos = localStorage.getItem('todoList');
+    if (savedTodos) {
+        todoList.push(...JSON.parse(savedTodos));
+        renderTodos(todoList);
+    }
+};
+
+
 function renderTodos(array) {
     const todoContainer = document.querySelector('.js-todo-list');
     todoContainer.innerHTML = '';
@@ -10,7 +19,7 @@ function renderTodos(array) {
         <div>${name}</div>
         <div>${dueDate}</div>
         <button onclick="
-        todoList.splice(${index}, 1); 
+        removeTodo(${index}); 
         renderTodos(todoList);" class = "delete-todo-button">Delete</button>`;
         todoContainer.innerHTML += item;
     });
@@ -30,6 +39,14 @@ function addTodo() {
     todoInput.value = ''; 
     todoDateInput.value = ''; 
 
+    localStorage.setItem('todoList', JSON.stringify(todoList));
+
+    renderTodos(todoList);
+}
+
+function removeTodo(index) {
+    todoList.splice(index, 1);
+    localStorage.setItem('todoList', JSON.stringify(todoList));
     renderTodos(todoList);
 }
 
